@@ -1,0 +1,92 @@
+<!-- templates/signup.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero-body bg-img">
+    <div class="container has-text-centered">
+        <div class="columns">
+            <div class="column is-1"></div>
+            <div class="column is-10">
+                <h4 class="title">Sign up</h4>
+                <div class="box">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% if messages[0][0] == 'info' %}
+                                <div class="notification is-success">
+                                    {{ messages[0][1] }}
+                                </div>
+                            {% else %}
+                                <div class="notification is-danger">
+                                    {{ messages[0][1] }}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endwith %}
+                    <form method="POST" action="signup">
+                        <div class="columns">
+                            <div class="column is-6">
+                                 <div class="field">
+                                    <label class="label">Name</label>
+                                    <div class="control">
+                                        <input class="input is-large" type="text" name="name" placeholder="Name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-6">
+                                 <div class="field">
+                                    <label class="label">Last name</label>
+                                    <div class="control">
+                                        <input class="input is-large" type="text" name="surname" placeholder="Last name" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-6">
+                                 <div class="field">
+                                    <label class="label">E-mail</label>
+                                    <div class="control">
+                                        <input class="input is-large" type="email" name="email" placeholder="E-mail" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-6">
+                                 <div class="field">
+                                    <label class="label">E-mail (validation)</label>
+                                    <div class="control">
+                                        <input class="input is-large" type="email" name="email_conf" placeholder="E-mail" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-6">
+                                <div class="field">
+                                    <label class="label">Institution</label>
+                                    <div class="control">
+                                        <input class="input is-large" type="text" name="institution" placeholder="Institution" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-6"></div>
+                        </div>
+                         <div class="columns">
+                            <div class="column is">
+                                <div class="field">
+                                    <div class="control">
+                                        <button class="button is-block is-info is-large is-fullwidth">Request access</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="column is-1"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

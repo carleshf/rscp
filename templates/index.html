@@ -1,0 +1,44 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<style type="text/css">
+    .bg-img { 
+        background-image: url(static/img/animal-1238237_1920.jpg) ;
+        background-position: center center;
+        background-repeat:  no-repeat;
+        background-attachment: fixed;
+        background-size:  cover;
+        background-color: #999;
+    }
+</style>
+
+<div class="hero-body bg-img">
+    <div class="container has-text-centered">
+        <div class="columns">
+            <div class="column is-2"></div>
+            <div class="column is-4"> <!-- has-text-white -->
+                <!--<h1 class="title has-text-white">
+                    rSCP
+                </h1>
+                <h2 class="subtitle has-text-white">
+                    ... some subtitle ...
+                </h2>
+                <p>
+                ... some short description ...
+                </p>-->
+                
+            </div>
+            <div class="column is-4">
+                <img src="static/img/g899.png" />
+            </div>
+            <div class="column is-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

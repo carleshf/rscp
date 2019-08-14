@@ -1,0 +1,107 @@
+<!-- templates/profile.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero-body bg-img">
+    <div class="container has-text-centered">
+        <div class="container">
+            <div class="column is-8 is-offset-2">
+                <div class="box">
+                    <div class="columns">
+                        <div class="column">
+                            <h3 class="title is-3 has-text-black">Your profile</h3>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Name</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="First name" value="{{ name }}" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Surname</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Last name" value="{{ surname }}" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Institution</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Last name" value="{{ institution }}" readonly />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control">
+                                    <input class="input" type="text" placeholder="Last name" value="{{ email }}" readonly />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="column is-8 is-offset-2">
+                <div class="box">
+                    <div class="columns">
+                        <div class="column">
+                            <h3 class="title is-3 has-text-black">Password</h3>
+                        </div>
+                    </div>
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <div class="notification is-danger">
+                        {{ messages[0] }}
+                    </div>
+                    {% endif %}
+                    {% endwith %}
+                    <form method="POST" action="profile">
+                        <div class="columns">
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">New password</label>
+                                    <div class="control">
+                                        <input class="input" type="password" name="password1" placeholder="New pasword" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <label class="label">New password (again)</label>
+                                    <div class="control">
+                                        <input class="input" type="password" name="password2" placeholder="New password" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                            </div>
+                            <div class="column">
+                                <div class="field">
+                                    <div class="control">
+                                        <button class="button is-block is-danger is-fullwidth">Update password</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
