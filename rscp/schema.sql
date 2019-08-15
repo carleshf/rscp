@@ -2,12 +2,12 @@ USE mysql_rscp_main;
 
 DROP TABLE IF EXISTS request;
 DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS datatype;
-DROP TABLE IF EXISTS method;
-DROP TABLE IF EXISTS strain;
-DROP TABLE IF EXISTS subject;
-DROP TABLE IF EXISTS cline;
 DROP TABLE IF EXISTS datafile;
+DROP TABLE IF EXISTS cline;
+DROP TABLE IF EXISTS method;
+DROP TABLE IF EXISTS subject;
+DROP TABLE IF EXISTS strain;
+DROP TABLE IF EXISTS datatype;
 
 CREATE TABLE IF NOT EXISTS user (
     id INT(21) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS method (
 )  ENGINE=INNODB;
 
 
-CREATE TABLE IF NOT EXISTS stratin (
+CREATE TABLE IF NOT EXISTS strain (
     id INT(21) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     description VARCHAR(300)
 )  ENGINE=INNODB;
@@ -91,14 +91,38 @@ INSERT INTO user (name, surname, institution, email, password, type)
     VALUES("Carles", "Hernandez", "BCH", "carles@chip.edu", "[123Abc]", "Administrator");
 
 
-INSERT INTO strain (description) VALUE("Sprague Dawley (SD)")
-INSERT INTO strain (description) VALUE("Lewis (LEW/SsNHsd)")
-INSERT INTO strain (description) VALUE("Long-Evans")
-INSERT INTO strain (description) VALUE("F322")
-INSERT INTO strain (description) VALUE("Immunodeficient athymic nude (Hsd:RH-Foxn1rnu ) rats")
+INSERT INTO strain (description) VALUE("Sprague Dawley (SD)");
+INSERT INTO strain (description) VALUE("Lewis (LEW/SsNHsd)");
+INSERT INTO strain (description) VALUE("Long-Evans");
+INSERT INTO strain (description) VALUE("F322");
+INSERT INTO strain (description) VALUE("Immunodeficient athymic nude (Hsd:RH-Foxn1rnu ) rats");
 
-INSERT INTO datatype (description) VALUE("WGS : 10X deep WGS for de novo assembly")
-INSERT INTO datatype (description) VALUE("RNA-seq")
-INSERT INTO datatype (description) VALUE("BS-seq")
-INSERT INTO datatype (description) VALUE("MeDIP-seq")
-INSERT INTO datatype (description) VALUE("multiple microscopic images")
+INSERT INTO datatype (description) VALUE("WGS : 10X deep WGS for de novo assembly");
+INSERT INTO datatype (description) VALUE("RNA-seq");
+INSERT INTO datatype (description) VALUE("BS-seq");
+INSERT INTO datatype (description) VALUE("MeDIP-seq");
+INSERT INTO datatype (description) VALUE("multiple microscopic images");
+
+SELECT * FROM subject, strain, method, cline, datafile, datatype WHERE
+    subject.idStrain = strain.id AND 
+    cline.idMethod = method.id AND
+    cline.idSubject = subject.id AND
+    datafile.idLine = cline.id AND
+    datafile.idType = datatype.id;
+
+
+SELECT DISTINCT * FROM subject, strain, method, cline WHERE
+    subject.idStrain = strain.id AND 
+    cline.idMethod = method.id AND
+    cline.idSubject = subject.id;
+
+
+
+
+SELECT strain.description, COUNT(strain.description) FROM subject, strain, method, cline, datafile, datatype WHERE
+    subject.idStrain = strain.id AND 
+    cline.idMethod = method.id AND
+    cline.idSubject = subject.id AND
+    datafile.idLine = cline.id AND
+    datafile.idType = datatype.id
+    GROUP BY strain.description;

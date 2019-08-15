@@ -7,15 +7,19 @@
 ###############################################################################
 
 from os import environ as env
+from os import path
 from flask import Flask, Blueprint, render_template, redirect, url_for
 from flask import request, flash, send_file
 from flask_login import LoginManager, login_user, login_required
 from flask_login import logout_user, current_user
+from werkzeug.utils import secure_filename
 
 from rscp.database import db, email_exists, sign_up_user, autenticate_user
 from rscp.database import list_pending_requests, list_validated_users
 from rscp.database import get_data_grant_access, generate_token_grant_access
-from rscp.database import get_user_by_token, update_password
+from rscp.database import get_user_by_token, update_password, insert_data
+from rscp.database import get_strain, get_sex, get_datatype, get_table
+from rscp.database import get_method, get_line
 from rscp import functions as fun
 import rscp.messages as msg
 from rscp.database import User
@@ -131,9 +135,19 @@ def profile_post():
 @main.route('/admin')
 @login_required
 def admin():
+	return render_template('admin.html')
+
+# -- ADMIN - LIST OF REQUESTS -------------------------------------------------
+@main.route('/request_manager')
+def request_manager():
 	requests = list_pending_requests()
+	return render_template('requests_manager.html', pending_requests = requests)
+
+# -- ADMIN - LIST OF USERS -----------------------------------------------------
+@main.route('/user_manager')
+def user_manager():
 	users = list_validated_users()
-	return render_template('admin.html', pending_requests = requests, users = users)
+	return render_template('users_manager.html', users = users)
 
 # -- ADMIN - GRANT ACCESS -----------------------------------------------------
 @main.route('/grant_access', methods = ['GET'])
@@ -151,7 +165,7 @@ def grant_access_get():
 			flash(msg.grant_access_email_error(reqs), 'error')
 	else:
 		flash(msg.grant_access_request_error(), 'error')
-	return redirect(url_for('main.admin'))
+	return redirect(url_for('main.request_manager'))
 
 @main.route('/xyz', methods = ['GET'])
 def xyz():
@@ -179,6 +193,71 @@ def xyz_post():
 	else:	
 		return redirect(url_for('main.xyz', token = token))
 
+# -- ADMIN - UPLOAD LIST OF FILES -----------------------------------------------------
+@main.route('/add_file')
+@login_required
+def add_file():
+	if current_user.type == 'Administrator':
+		stage = request.args.get('stage')
+		data = request.args.get('data')
+		if not stage:
+			stage = 'stage1'
+		if not data:
+			data = []
+		return render_template('add_file.html', stage = stage, data = data)
+	else:
+		redirect(url_for('main.profile'))
+
+@main.route('/add_file', methods = ['GET', 'POST'])
+@login_required
+def add_file_post():
+	if current_user.type == 'Administrator':
+		stage = 'stage1'
+		data = []
+		if request.method == 'POST':
+			file = request.files['file']
+			if not file:
+				flash(msg.upload_file_emtpy_wrong(), 'error')
+			if file.filename == '':
+				flash(msg.upload_file_emtpy_wrong(), 'error')
+			if file and fun.allowed_file(file.filename):
+				filename = secure_filename(file.filename)
+				filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
+				file.save(filepath)
+				dta = fun.read_table_files(filepath)
+				if dta['error'] == 0:
+					status = insert_data(dta['data'])
+					if status:
+						flash('File was uploaded and the content inserted into the database.', 'info')
+						stage = 'stage3'
+					else:
+						flash('File was uploaded but the content could not be inserted into the database.', 'error')
+						stage = 'stage3'
+				else:
+					flash('File was uploaded but the format is incorrect.', 'error')
+					stage = 'stage2'
+					data = dta['data']
+
+		return render_template('add_file.html', stage = stage, data = data)
+	else:
+		redirect(url_for('main.profile'))
+
+
+@main.route('/data_matrix')
+def data_matrix():
+	sex_t = get_sex()
+	strain_t = get_strain()
+	line_t = get_line()
+	method_t = get_method()
+	type_t = get_datatype()
+	data = get_table()
+	return render_template('data_matrix.html', matrix = data, sex_t = sex_t, \
+		strain_t = strain_t, line_t = line_t, method_t = method_t, type_t = type_t)
+
+@main.route('/about')
+def about():
+	return render_template('about.html')
+
 # CREATING FLASK APPLICATION
 ###############################################################################
 
@@ -189,6 +268,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://' + env['DDBB_USER'] + ':' + \
 	env['DDBB_PASSWORD'] + '@' + env['DDBB_HOST'] + ':' + env['DDBB_PORT'] + \
 	'/' + env['DDBB_NAME']
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['UPLOAD_FOLDER'] = env['APP_UPLOAD_FOLDER']
 app.register_blueprint(auth)
 app.register_blueprint(main)
 #app.register_blueprint(api)

@@ -1,0 +1,108 @@
+<!-- templates/admin.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+	$(document).ready(function() {
+		$('#tabs li').on('click', function() {
+			var tab = $(this).data('tab');
+
+			$('#tabs li').removeClass('is-active');
+			$(this).addClass('is-active');
+
+			$('#tab-content table').removeClass('is-active');
+			$('table[data-content="' + tab + '"]').addClass('is-active');
+		});
+	});
+
+	document.addEventListener('DOMContentLoaded', () => {
+		(document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+			$notification = $delete.parentNode;
+			$delete.addEventListener('click', () => {
+				$notification.parentNode.removeChild($notification);
+			});
+		});
+	});
+</script>
+
+<style type="text/css">
+	#tab-content table {
+		display: none;
+		width: 100%;
+	}
+
+	#tab-content table.is-active {
+		display: block;
+		width: 100%;
+	}
+
+</style>
+
+<div class="hero-body bg-img">
+    <div class="container has-text-centered">
+		<div class="columns">
+			<div class="column is-1"></div>
+			<div class="column is-10 is-centered">
+				<div class="box">
+					<div class="columns">
+						<div class="column">
+							{% with messages = get_flashed_messages(with_categories=true) %}
+				                {% if messages %}
+				                    {% if messages[0][0] == 'info' %}
+				                        <div class="notification is-success">
+				                        	<button class="delete"></button>
+				                            {{ messages[0][1] }}
+				                        </div>
+				                    {% else %}
+				                        <div class="notification is-danger">
+				                        	<button class="delete"></button>
+				                            {{ messages[0][1] }}
+				                        </div>
+				                    {% endif %}
+				                {% endif %}
+				            {% endwith %}
+				        </div>
+				    </div>
+				    <div class="columns is-centered">
+						<div class="column">
+							<table class="table is-striped">
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Surname</th>
+										<th>Institution</th>
+										<th>Email</th>
+										<th>Request Date</th>
+										<th>Validation Date</th>
+										<th>Registration Date</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for usr in users %}
+									<tr>
+										<td>{{ usr.User.name }}</td>
+										<td>{{ usr.User.surname }}</td>
+										<td>{{ usr.User.institution }}</td>
+										<td>{{ usr.User.email }}</td>
+										<td>{{ usr.Request.request_date.year }}/{{ usr.Request.request_date.month }}/{{ usr.Request.request_date.day }}</td>
+										<td>{{ usr.Request.validated_date.year }}/{{ usr.Request.validated_date.month }}/{{ usr.Request.validated_date.day }}</td>
+										<td>{{ usr.Request.registered_date.year }}/{{ usr.Request.registered_date.month }}/{{ usr.Request.registered_date.day }}</td>
+										<td><a class="button is-warning" href="#">Grant access</a></td>
+									</tr>
+									{% endfor %}
+								</tbody>
+				            </table>
+				        </div>
+				    </div>
+				</div>
+			</div>
+			<div class="column is-1"></div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

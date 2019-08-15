@@ -1,0 +1,147 @@
+<!-- templates/admin.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="hero-body bg-img">
+    <div class="container is-fluid">
+    	<h6 class="title is-6">Summary</h6>
+    	<div class="box is-full">
+    		<div class="columns">
+    			<!-- info boxes -->
+    			<div class="column">
+    				<h6 class="title is-6">Sex</h6>
+	    			<table class="table is-strip">
+	    				<thead>
+	    					<tr>
+								<td><span class="is-size-7">Name</span></td>
+								<td><span class="is-size-7">N</span></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in sex_t %}
+							<tr>
+								<td><span class="is-size-7">{{ row[0] }}</span></td>
+								<td><span class="tag is-light is-size-7">{{ row[1] }}</span></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	    			</table>
+	    		</div>
+		    	<div class="column is-3">
+    				<h6 class="title is-6">Strain</h6>
+	    			<table class="table is-strip">
+	    				<thead>
+	    					<tr>
+								<td><span class="is-size-7">Name</span></td>
+								<td><span class="is-size-7">N</span></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in strain_t %}
+							<tr>
+								<td><span class="is-size-7">{{ row[0] }}</span></td>
+								<td><span class="tag is-light is-size-7">{{ row[1] }}</span></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	    			</table>
+		    	</div>
+		    	<div class="column">
+    				<h6 class="title is-6">Line</h6>
+	    			<table class="table is-strip">
+	    				<thead>
+	    					<tr>
+								<td><span class="is-size-7">Name</span></td>
+								<td><span class="is-size-7">N</span></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in line_t %}
+							<tr>
+								<td><span class="is-size-7">{{ row[0] }}</span></td>
+								<td><span class="tag is-light is-size-7">{{ row[1] }}</span></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	    			</table>
+		    	</div>
+		    	<div class="column">
+    				<h6 class="title is-6">Method</h6>
+	    			<table class="table is-strip">
+	    				<thead>
+	    					<tr>
+								<td><span class="is-size-7">Name</span></td>
+								<td><span class="is-size-7">N</span></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in method_t %}
+							<tr>
+								<td><span class="is-size-7">{{ row[0] }}</span></td>
+								<td><span class="tag is-light is-size-7">{{ row[1] }}</span></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	    			</table>
+		    	</div>
+	    		<div class="column is-3">
+    				<h6 class="title is-6">Data type</h6>
+	    			<table class="table is-strip">
+	    				<thead>
+	    					<tr>
+								<td><span class="is-size-7">Name</span></td>
+								<td><span class="is-size-7">N</span></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in type_t %}
+							<tr>
+								<td><span class="is-size-7">{{ row[0] }}</span></td>
+								<td><span class="tag is-light is-size-7">{{ row[1] }}</span></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	    			</table>
+	    		</div>
+		    </div>
+    	</div>
+    	<div class="columns">
+		    <!-- main table -->
+		    <div class="column">
+		    	<h6 class="title is-6">Data matrix</h6>
+		    	<div class="box">
+		    		<table class="table is-strip">
+	    				<thead>
+	    					<tr>
+								<td><span class="is-size-6">Name</span></td>
+								<td><span class="is-size-6">Sex</span></td>
+								<td><span class="is-size-6">Strain</span></td>
+								<td><span class="is-size-6">Method</span></td>
+								<td><span class="is-size-6">Line</span></td>
+								<td><span class="is-size-6">Type</span></td>
+								<td><span class="is-size-6">Instrument</span></td>
+							</tr>
+						</thead>
+						<tbody>
+							{% for row in matrix %}
+							<tr>
+								<td><span class="is-size-7">{{ row[ 2] }}</span></td>
+								<td><span class="is-size-7">{{ row[ 3] }}</span></td>
+								<td><span class="is-size-7">{{ row[ 6] }}</span></td>
+								<td><span class="is-size-7">{{ row[ 8] }}</span></td>
+								<td><span class="is-size-7">{{ row[12] }}</span></td>
+								<td><span class="is-size-7">{{ row[23] }}</span></td>
+								<td><span class="is-size-7">{{ row[21] }}</span></td>
+							</tr>
+							{% endfor %}
+						</tbody>
+	    			</table>
+		    	</div>
+		    </div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

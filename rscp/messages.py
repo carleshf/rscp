@@ -75,3 +75,24 @@ Bests,
 The rSCP staff
 """
 	return Template(content).substitute(URL=url_token)
+
+# -- ADMIN - LOAD DATA -----------------------------------------------------
+
+def upload_file_emtpy_wrong():
+	return 'Please, provide a CSV file with the information to insert ' + \
+		'into the database.'
+
+def invalid_col_num():
+	return 'Incorrect number of columns.'
+
+def invalid_sex():
+	return 'Invalid value for "sex".'
+
+def invalid_strain():
+	return 'Invalid value for "strain".'
+
+def invalid_datatype():
+	return 'Invalid value for "datatype".'
+
+def invalid_data():
+	return 'Data provided contains invalid values.'
